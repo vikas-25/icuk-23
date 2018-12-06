@@ -17,5 +17,10 @@ pipeline {
         sh 'echo whoami'
       }
     }
+   stage('CreateInstance') {
+      steps {
+        ansiblePlaybook credentialsId: 'd28aea44-7963-408d-99b0-cafacde1fd4c', installation: 'Anisble', playbook: '$WORKSPACE/createInstance.yaml'
+      }
    }
- }
+  }
+}
