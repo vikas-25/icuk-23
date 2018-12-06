@@ -1,31 +1,32 @@
-- name: Create a new Demo EC2 instance
-  hosts: localhost
-  gather_facts: False
-  tasks:
+---
+  - name: Provision an EC2 Instance
+    hosts: local
+    connection: local
+    gather_facts: False
+    tags: provisioning
 
-    - name: Create an ec2 instance
-      local_action: ec2
-         key_name: Ec2KK
-         group: ans-slave
-         instance_type: t2.micro
-         image: ami-0080e4c5bc078760e
-         wait: true
-         region: us-east-1
-         count: 1  # default
-         count_tag:
-            Name: customer
-         instance_tags:
-            Name: customer
-         vpc_subnet_id: subnet-30c6526c
-         assign_public_ip: yes
-      register: ec2
-    - name: Add the newly created EC2 instance(s) to the local host group (located inside the directory)
-      local_action: lineinfile 
+    tasks:
+
+      - name: Launch the new EC2 Instance
+        local_action: ec2 
+                      group=ans-slave 
+                      instance_type=t2.micro 
+                      image=ami-0080e4c5bc078760e
+                      wait=true 
+                      region=us-east-1
+                      keypair=Ec2KK
+                      count=1
+        register: ec2
+
+      - name: Add the newly created EC2 instance(s) to the local host group (located inside the directory)
+        local_action: lineinfile 
                       dest="./hosts" 
                       regexp={{ item.public_ip }} 
-                      insertafter="[webserver]" line={{ item.public_ip }}
+                      insertafter="[customer]" line={{ item.public_ip }}
         with_items: ec2.instances
-     - name: Wait for SSH to come up
+
+
+      - name: Wait for SSH to come up
         local_action: wait_for 
                       host={{ item.public_ip }} 
                       port=22 
@@ -37,4 +38,4 @@
         with_items: ec2.instances
         args:
           tags:
-            Name: webserver
+            Name: customer
