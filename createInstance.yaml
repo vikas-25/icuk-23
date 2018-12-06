@@ -1,0 +1,9 @@
+- ec2:
+    key_name: Ec2KK
+    instance_type: t2.micro
+    image: ami-0080e4c5bc078760e
+    wait: yes
+    group: customer
+    count: 1
+    vpc_subnet_id: subnet-30c6526c
+    assign_public_ip: yes
