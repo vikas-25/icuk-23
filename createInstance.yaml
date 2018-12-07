@@ -23,7 +23,8 @@
                       dest="/tmp/hosts" 
                       state: present
                       regexp={{ item.public_ip }} 
-                      insertafter="[customer]" line={{ item.public_ip }}
+                      insertafter="[customer]" 
+                      line={{ item.public_ip }}
         with_items: "{{ ec2.instances }}"
 
 
