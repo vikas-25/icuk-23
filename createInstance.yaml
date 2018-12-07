@@ -21,9 +21,10 @@
 
       - name: Touch a host file
         local_action: file
-                      dest="/tmp/hosts_customer" 
-                      state=present
- 
+                      path: /etc/foo.conf
+                      state: touch
+                      mode: "u=rw,g=r,o=r"
+
 
       - name: Add the newly created EC2 instance(s) to the local host group (located inside the directory)
         local_action: lineinfile 
