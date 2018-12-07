@@ -22,13 +22,13 @@
       - name: Touch a host file
         local_action: file
                       dest="/tmp/hosts_customer" 
-                      state: present
+                      state=present
  
 
       - name: Add the newly created EC2 instance(s) to the local host group (located inside the directory)
         local_action: lineinfile 
                       dest="/tmp/hosts_customer" 
-                      state: present
+                      state=present
                       regexp={{ item.public_ip }} 
                       line={{ item.public_ip }}
         with_items: "{{ ec2.instances }}"
