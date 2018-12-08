@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  parameters {
+    string(name: 'EUREKA_IPADDRESS', description: 'localhost')
+  }
   tools { 
         maven 'Maven'
   }
