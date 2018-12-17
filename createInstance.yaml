@@ -17,8 +17,11 @@
                       keypair=Ec2KK
                       count=1
         register: ec2
-
-
+      - name: Touch a host file
+        local_action: file
+                      path=/tmp/hosts_customer
+                      state=absent
+                      
       - name: Touch a host file
         local_action: file
                       path=/tmp/hosts_customer
@@ -31,7 +34,7 @@
                       dest="/tmp/hosts_customer" 
                       state=present
                       regexp={{ item.public_ip }} 
-                      line={{ item.public_ip }}
+                      line="{{ item.public_ip }} ansible_ssh_common_args='-o StrictHostKeyChecking=no'"
         with_items: "{{ ec2.instances }}"
 
 
